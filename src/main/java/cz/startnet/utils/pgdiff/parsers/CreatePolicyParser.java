@@ -23,9 +23,9 @@ public class CreatePolicyParser {
 
         parser.expect("ON");
 
-        final String tableName = parser.parseIdentifier();
+        final String qualifiedTableName = parser.parseIdentifier();
         final String schemaName =
-                ParserUtils.getSchemaName(tableName, database);
+                ParserUtils.getSchemaName(qualifiedTableName, database);
 
         final PgSchema schema = database.getSchema(schemaName);
         if (schema == null) {
@@ -34,15 +34,23 @@ public class CreatePolicyParser {
                     statement));
         }
 
-        final PgTable table = schema.getTable(ParserUtils.getObjectName(tableName));
+        final PgTable table = schema.getTable(ParserUtils.getObjectName(qualifiedTableName));
         if (table == null) {
             throw new RuntimeException(MessageFormat.format(
-                    Resources.getString("CannotFindTable"), tableName,
+                    Resources.getString("CannotFindTable"), qualifiedTableName,
                     statement));
         }
 
+        if (parser.expectOptional("FOR")) {
+            String command = parser.expectOptionalOneOf("ALL", "SELECT",
+                "INSERT", "UPDATE", "DELETE");
+            policy.setCommand(command);
+        } else{
+            policy.setCommand("ALL");
+        }
+
         policy.setName(policyName);
-        policy.setTableName(tableName);
+        policy.setTableName(table.getName());
         table.addPolicy(policy);
     }
 

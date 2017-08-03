@@ -258,6 +258,7 @@ public class PgDiffTest {
                     // Tests policies
                   , {"create_policies", false, false, false, false}
                   , {"drop_policies", false, false, false, false}
+                  , {"alter_policies", false, false, false, false}
                 });
     }
     /**

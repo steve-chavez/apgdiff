@@ -42,4 +42,12 @@ public class PgPolicy {
     public String getTableName() {
         return tableName;
     }
+
+    public void setCommand(final String command) {
+        this.command = command;
+    }
+
+    public String getCommand() {
+        return command;
+    }
 }

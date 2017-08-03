@@ -314,6 +314,8 @@ public class PgDiff {
                     writer, oldSchema, newSchema, searchPathHelper);
             PgDiffPolicies.createPolicies(
                     writer, oldSchema, newSchema, searchPathHelper);
+            PgDiffPolicies.alterPolicies(
+                    writer, oldSchema, newSchema, searchPathHelper);
 
             PgDiffFunctions.alterComments(
                     writer, oldSchema, newSchema, searchPathHelper);

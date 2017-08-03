@@ -1,0 +1,45 @@
+/**
+ * Copyright 2006 StartNet s.r.o.
+ *
+ * Distributed under MIT license
+ */
+package cz.startnet.utils.pgdiff.schema;
+
+import cz.startnet.utils.pgdiff.PgDiffUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.Objects;
+
+/**
+ *
+ * Stores POLICY information.
+ *
+ */
+public class PgPolicy {
+
+    private String name;
+    private String tableName;
+    private String command;
+    private List<String> roles;
+    private String using;
+    private String check;
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setTableName(final String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+}

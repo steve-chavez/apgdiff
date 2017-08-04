@@ -25,7 +25,7 @@ public class PgPolicy {
     private String command;
     private List<String> roles = new ArrayList<String>();
     private String using;
-    private String check;
+    private String withCheck;
 
     public void setName(final String name) {
         this.name = name;
@@ -65,5 +65,13 @@ public class PgPolicy {
 
     public String getUsing() {
         return using;
+    }
+
+    public void setWithCheck(final String withCheck) {
+        this.withCheck = withCheck;
+    }
+
+    public String getWithCheck() {
+        return withCheck;
     }
 }

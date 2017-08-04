@@ -68,6 +68,14 @@ public class PgDiffPolicies {
                             ){
                               searchPathHelper.outputSearchPath(writer);
                               alterPolicySQL(writer, newPolicy);
+                          } else if (
+                              (policy.getWithCheck() == null && newPolicy.getWithCheck() != null)
+                            ||(policy.getWithCheck() != null && newPolicy.getWithCheck() == null)
+                            ||(policy.getWithCheck() != null && newPolicy.getWithCheck() != null
+                               && !policy.getWithCheck().equals(newPolicy.getWithCheck()))
+                            ){
+                              searchPathHelper.outputSearchPath(writer);
+                              alterPolicySQL(writer, newPolicy);
                           } else {
                               List<String> tempOldRoles = new ArrayList<String>(policy.getRoles());
                               boolean equalRoles =
@@ -123,6 +131,13 @@ public class PgDiffPolicies {
           writer.println(policy.getUsing());
           writer.print(")");
         }
+        if (policy.getWithCheck() != null){
+          writer.println();
+          writer.println("WITH CHECK (");
+          writer.print("  ");
+          writer.println(policy.getWithCheck());
+          writer.print(")");
+        }
         writer.println(";");
     }
 
@@ -141,6 +156,13 @@ public class PgDiffPolicies {
           writer.println("USING (");
           writer.print("  ");
           writer.println(policy.getUsing());
+          writer.print(")");
+        }
+        if (policy.getWithCheck() != null){
+          writer.println();
+          writer.println("WITH CHECK (");
+          writer.print("  ");
+          writer.println(policy.getWithCheck());
           writer.print(")");
         }
         writer.println(";");

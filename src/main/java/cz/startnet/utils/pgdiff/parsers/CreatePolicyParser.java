@@ -80,6 +80,17 @@ public class CreatePolicyParser {
             parser.expect(")");
         }
 
+        // We need this workaround to recognize WITH CHECK( with the
+        // parentheses without space
+        if (parser.expectOptional("WITH CHECK(")){
+            policy.setWithCheck(parser.getExpression());
+            parser.expect(")");
+        } else if (parser.expectOptional("WITH", "CHECK")){
+            parser.expect("(");
+            policy.setWithCheck(parser.getExpression());
+            parser.expect(")");
+        }
+
         policy.setName(policyName);
         policy.setTableName(table.getName());
         table.addPolicy(policy);

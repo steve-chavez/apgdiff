@@ -14,4 +14,23 @@ create policy only_evens on todos using ( (id % 2) = 0);
 
 create policy only_evens_and_1 on todos using ( (id % 2) = 0 or id = 1 );
 
-create policy only_evens_whitespace on todos using ( (id % 2) = 0 );
+create policy only_evens_whitespace_comment on todos using ( (id % 2) = 0 );
+
+create policy check_evens_and_1 on todos
+with check(
+  (id % 2) = 0
+  or
+  id = 1
+);
+
+create policy check_using_evens_and_1 on todos
+using (
+  (id % 2) = 0
+  or
+  id = 1
+)
+with check(
+  (id % 2) = 0
+  or
+  id = 1
+);

@@ -69,6 +69,17 @@ public class CreatePolicyParser {
             policy.getRoles().add("PUBLIC");
         }
 
+        // We need this workaround to recognize USING( with the
+        // parentheses without space
+        if (parser.expectOptional("USING(")) {
+            policy.setUsing(parser.getExpression());
+            parser.expect(")");
+        } else if (parser.expectOptional("USING")){
+            parser.expect("(");
+            policy.setUsing(parser.getExpression());
+            parser.expect(")");
+        }
+
         policy.setName(policyName);
         policy.setTableName(table.getName());
         table.addPolicy(policy);

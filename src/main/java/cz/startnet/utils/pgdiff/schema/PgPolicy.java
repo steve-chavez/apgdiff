@@ -58,4 +58,12 @@ public class PgPolicy {
     public void addRole(final String role) {
         roles.add(role);
     }
+
+    public void setUsing(final String using) {
+        this.using = using;
+    }
+
+    public String getUsing() {
+        return using;
+    }
 }

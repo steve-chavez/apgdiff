@@ -1,4 +1,3 @@
-
 create table todos (
 	 id integer
 );

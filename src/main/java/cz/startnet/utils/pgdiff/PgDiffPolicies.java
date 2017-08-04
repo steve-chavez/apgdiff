@@ -60,6 +60,14 @@ public class PgDiffPolicies {
                               searchPathHelper.outputSearchPath(writer);
                               dropPolicySQL(writer, newPolicy);
                               createPolicySQL(writer, newPolicy);
+                          } else if (
+                              (policy.getUsing() == null && newPolicy.getUsing() != null)
+                            ||(policy.getUsing() != null && newPolicy.getUsing() == null)
+                            ||(policy.getUsing() != null && newPolicy.getUsing() != null
+                               && !policy.getUsing().equals(newPolicy.getUsing()))
+                            ){
+                              searchPathHelper.outputSearchPath(writer);
+                              alterPolicySQL(writer, newPolicy);
                           } else {
                               List<String> tempOldRoles = new ArrayList<String>(policy.getRoles());
                               boolean equalRoles =
@@ -108,6 +116,13 @@ public class PgDiffPolicies {
         for (Iterator<String> iterator = policy.getRoles().iterator(); iterator.hasNext();)
             roles += iterator.next() + (iterator.hasNext()? ", " : "");
         writer.print(roles);
+        if (policy.getUsing() != null){
+          writer.println();
+          writer.println("USING (");
+          writer.print("  ");
+          writer.println(policy.getUsing());
+          writer.print(")");
+        }
         writer.println(";");
     }
 
@@ -121,6 +136,13 @@ public class PgDiffPolicies {
         for (Iterator<String> iterator = policy.getRoles().iterator(); iterator.hasNext();)
             roles += iterator.next() + (iterator.hasNext()? ", " : "");
         writer.print(roles);
+        if (policy.getUsing() != null){
+          writer.println();
+          writer.println("USING (");
+          writer.print("  ");
+          writer.println(policy.getUsing());
+          writer.print(")");
+        }
         writer.println(";");
     }
 

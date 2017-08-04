@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 public class PgDiffPolicies {
 
@@ -56,8 +57,18 @@ public class PgDiffPolicies {
                           String oldCommand = policy.getCommand();
                           if(newCommand != null && oldCommand != null
                              && !newCommand.equals(oldCommand)){
+                              searchPathHelper.outputSearchPath(writer);
                               dropPolicySQL(writer, newPolicy);
                               createPolicySQL(writer, newPolicy);
+                          } else {
+                              List<String> tempOldRoles = new ArrayList<String>(policy.getRoles());
+                              boolean equalRoles =
+                                  newPolicy.getRoles().containsAll(policy.getRoles()) &&
+                                  policy.getRoles().containsAll(newPolicy.getRoles());
+                              if(!equalRoles){
+                                  searchPathHelper.outputSearchPath(writer);
+                                  alterPolicySQL(writer, newPolicy);
+                              }
                           }
                       }
                   }
@@ -92,6 +103,24 @@ public class PgDiffPolicies {
                 + " ON "
                 + PgDiffUtils.getQuotedName(policy.getTableName()));
         writer.print(" FOR " + policy.getCommand());
+        String roles = "";
+        writer.print(" TO ");
+        for (Iterator<String> iterator = policy.getRoles().iterator(); iterator.hasNext();)
+            roles += iterator.next() + (iterator.hasNext()? ", " : "");
+        writer.print(roles);
+        writer.println(";");
+    }
+
+    private static void alterPolicySQL(final PrintWriter writer, final PgPolicy policy){
+        writer.print("ALTER POLICY "
+            + PgDiffUtils.getQuotedName(policy.getName())
+            + " ON "
+            + PgDiffUtils.getQuotedName(policy.getTableName()));
+        String roles = "";
+        writer.print(" TO ");
+        for (Iterator<String> iterator = policy.getRoles().iterator(); iterator.hasNext();)
+            roles += iterator.next() + (iterator.hasNext()? ", " : "");
+        writer.print(roles);
         writer.println(";");
     }
 

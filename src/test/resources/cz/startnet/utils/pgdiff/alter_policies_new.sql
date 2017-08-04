@@ -2,4 +2,10 @@ create table todos (
 	 id integer
 );
 
-create policy only_owners on todos for SELECT;
+create policy only_owners on todos for INSERT;
+
+create policy no_private on todos for ALL TO anonymous;
+
+create policy only_admins on todos TO admin, manager;
+
+create policy only_managers on todos;

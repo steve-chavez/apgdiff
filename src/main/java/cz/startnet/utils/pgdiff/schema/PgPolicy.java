@@ -23,7 +23,7 @@ public class PgPolicy {
     private String name;
     private String tableName;
     private String command;
-    private List<String> roles;
+    private List<String> roles = new ArrayList<String>();
     private String using;
     private String check;
 
@@ -49,5 +49,13 @@ public class PgPolicy {
 
     public String getCommand() {
         return command;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void addRole(final String role) {
+        roles.add(role);
     }
 }

@@ -45,8 +45,28 @@ public class CreatePolicyParser {
             String command = parser.expectOptionalOneOf("ALL", "SELECT",
                 "INSERT", "UPDATE", "DELETE");
             policy.setCommand(command);
-        } else{
+        } else {
             policy.setCommand("ALL");
+        }
+
+        if (parser.expectOptional("TO")) {
+            if (parser.expectOptional("PUBLIC")){
+                policy.getRoles().add("PUBLIC");
+            } else {
+                String role = parser.parseIdentifier();
+                policy.getRoles().add(role);
+                while (role != null) {
+                    if (parser.expectOptional(",")) {
+                        parser.skipWhitespace();
+                        role = parser.parseIdentifier();
+                        policy.getRoles().add(role);
+                    } else {
+                        role = null;
+                    }
+                }
+            }
+        } else {
+            policy.getRoles().add("PUBLIC");
         }
 
         policy.setName(policyName);
